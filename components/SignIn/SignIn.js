@@ -1,218 +1,169 @@
 import React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useStateContext } from '@/context/StateContext'
+import { login } from '@/backend/Auth'
 const SignIn = () => {
+  const { user, setUser } = useStateContext()
+  const [ email, setEmail ] = useState('')
+  const [ password, setPassword ] = useState('')
+
+  const router = useRouter()
+
+  async function handleLogin(){
+    try {
+      const userCredential = await login(email, password);
+      setUser(userCredential.user);
+      router.push('/dashboard');
+    } catch (error) {
+      console.error("Error signing in user:", error.code, error.message);
+      alert("Login failed: " + error.message);
+    }
+  }
   return (
-    <StyledWrapper>
-        <div className="container">
-            <div className="terminal-loader">
-                <div className="terminal-header">
-                <div className="terminal-title">Sign-In</div>
-                <div className="terminal-controls">
-                    <div className="control close" />
-                    <div className="control minimize" />
-                    <div className="control maximize" />
-                </div>
-                </div>
-                <div className="input-row-email">> email: <input className="input-email" type = "text"/></div>
-                <div className="input-row-password">> password: <input className="input-password" type = "password"/></div>
-                <div className="text signs">> [Sign In] [Register] </div>
-                <div className="text google">> [Google Sign-In]</div>
-                <div className="text bar">> [<Link href="/">Home</Link>] [<Link href="/about">About</Link>] [<Link href="/play">Play</Link>] </div> <br/>
-                <img src="https://cdn.osxdaily.com/wp-content/uploads/2018/03/party-parrot-terminal.mov.gif" width="388px" height="348px"/>
-            </div>
-      </div>
-    </StyledWrapper>
+    <LandingContainer>
+          <LeftBar />
+          <CenterBar />
+          <SignInText style={{fontFamily: 'Arial',left: '-5%', top:'-5%',fontSize: '180px', opacity: 0.3, }}>PREDICTIONS HIGHER LOWER GUESS MARKETS</SignInText>
+          <SignInText style={{fontSize: '200px', top: '9%', left:'-20%', opacity: 0.6 }}>PREDICTIONS HIGHER LOWER GUESS MARKETS</SignInText>
+          <SignInText style={{ top: '24%', left: '-80%', fontSize: '160px', opacity: 0.4 }}>PREDICTIONS HIGHER LOWER GUESS MARKETS</SignInText>
+          <SignInText style={{ top: '35.35%', left: '-45%', fontFamily: 'Arial', fontSize: '220px', opacity: 0.67 }}>PREDICTIONS HIGHER LOWER GUESS MARKETS</SignInText>
+          <SignInText style={{fontFamily: 'fantasy', font: 'Blippo', top: '84%', left: '42%', fontSize: '190px', opacity: 0.3 }}>PREDICTIONS</SignInText>
+          <SignInText style={{ top: '51%',left: '-2%', fontSize: '590px', opacity: 0.8 }}>LOW</SignInText>
+          <BackgroundText style={{ top: '72%', left: '75%', fontSize: '150px', rotate:'180deg', opacity: 0.7 }}>
+            <Link href="/" style={{ color: 'black'}}>
+              home
+            </Link>
+          </BackgroundText>
+          
+          <SignInBar style={{rotate: '-5deg'}}/>
+          <input type="text" placeholder="email" style={{position: 'absolute', top: '30%', left: '25%', width: '30%', height: '10%', fontSize: '20px', padding: '10px', border: '4px solid black', boxShadow: '6px 6px 0px #CCFF00'}} />
+          <input type="password" placeholder="password" style={{position: 'absolute', top: '45%', left: '30%', width: '30%', height: '10%', fontSize: '20px', padding: '10px', border: '4px solid black', boxShadow: '6px 6px 0px #CCFF00'}} />
+          <PlayButton style={{ right: '15%', top: '60%' }} >
+            <Link href="/" style={{ color: 'black', textDecoration: 'none' }}>SIGN IN</Link>
+          </PlayButton>
+
+          <PlayButton style={{ right: '0%', top: '82%'} }>
+            <Link href="/play" style={{ color: 'black', textDecoration: 'none' }}>PLAY<br/>NOW</Link>
+          </PlayButton>
+          
+          <Arrow style={{ position: 'absolute', top: '40%', right: '3%', transform: 'rotate(45deg)' }} />
+          <Arrow style={{ position: 'absolute', top: '60%', right: '3%', transform: 'rotate(45deg)' }} />
+          <Arrow style={{ position: 'absolute', top: '52%', right: '3%', transform: 'rotate(45deg)' }} />
+          <Arrow style={{ position: 'absolute', top: '70%', right: '3%', transform: 'rotate(45deg)' }} />
+    
+          <Arrow style={{ position: 'absolute', top: '45%', right: '7%', transform: 'rotate(45deg)' }} />
+          <Arrow style={{ position: 'absolute', top: '56%', right: '7%', transform: 'rotate(45deg)' }} />
+          <Arrow style={{ position: 'absolute', top: '67%', right: '7%', transform: 'rotate(45deg)' }} />
+          <Arrow style={{ position: 'absolute', top: '77%', right: '7%', transform: 'rotate(45deg)' }} />
+        </LandingContainer>
   )
 }
 
-
-//https://uiverse.io/themrsami/old-snail-13 background. animation was added by me
-const StyledWrapper = styled.div`
-  width: 100%;
+const LandingContainer = styled.main`
+  position: relative;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: blue;
-    background-image: linear-gradient(
-      45deg,
-      transparent 33.3%,
-      rgba(19, 185, 116, 0.35) 33.3%,
-      rgba(196, 215, 216, 0.35) 66.6%,
-      transparent 66.6%
-    ),
-    linear-gradient(
-      -45deg,
-      transparent 33.3%,
-      rgba(19, 185, 116, 0.35) 33.3%,
-      rgba(12, 153, 158, 0.35) 66.6%,
-      transparent 66.6%
-    );
-    background-size: 60px 60px;
-  animation: moveBackgroundA 1s linear infinite;
+  background: white;
+  border: 10px solid black;
+  padding: 40px;
+  overflow: hidden;
+`;
 
-  @keyframes moveBackgroundA {
-  from {
-    background-position: 0px 60px;
+const BackgroundText = styled.div`
+  position: absolute;
+  font-weight: 900;
+  letter-spacing: -8px;
+  line-height: 0.8;
+  z-index: 0;
+  white-space: nowrap;
+  &:hover {
+    transform: rotate(4deg) translate(7px, 7px);
   }
-  to {
-    background-position: 60px 0px;
-  }
-}
-  @keyframes typeOnce {
-    from {width:0;}
-    to {width: 19ch;}
-  }
+`;
 
-  @keyframes typePrompt {
-    from {width: 0;}
-    to {width: 35ch;}
+const SignInText = styled.div`
+  position: absolute;
+  font-weight: 900;
+  letter-spacing: -8px;
+  line-height: 0.8;
+  z-index: 0;
+  white-space: nowrap;
+`;
+
+const PlayButton = styled.button`
+  position: absolute;
+  top: 28%;
+  right: 15%;
+  background: #CCFF00;
+  border: 6px solid black;
+  padding: 35px 55px;
+  font-size: 30px;
+  font-weight: 900;
+  text-transform: uppercase;
+  box-shadow: -15px 15px 0px black;
+  cursor: pointer;
+  z-index: 4;
+  transform: rotate(-7deg);
+  
+  &:hover {
+    transform: rotate(4deg) translate(7px, 7px);
+    box-shadow: 10px -10px 0px black;
   }
+`;
 
-  @keyframes typeCreds {
-    from {width: 0;}
-    to {width: 40ch;}
-  }
+const LeftBar = styled.div`
+  position: absolute;
+  top: -10%;
+  left: -5%;
+  width: 55%;
+  height: 150%;
+  opacity: 0.5;
+  rotate: -5deg;
+  background: #CCFF00;
+`
 
-  a {
-    color: #0f0;
-    text-decoration: none;
-    
-    &:hover {
-      text-decoration: underline;
-      color: #5b1bd1;
-    }
-  }
+const CenterBar = styled.div`
+  position: absolute;
+  top: -25%;
+  left: 20%;
+  width: 55%;
+  height: 200%;
+  opacity: 0.5;
+  rotate: 15deg;
+  background: #758f0f;
+`
 
-  .terminal-loader {
-    width: 550px;
-    min-height: 500px;
-    border: 0.1em solid #333;
-    background-color: #000000;
-    color: #0f0;
-    font-family: "Courier New", Courier, monospace;
-    font-size: 1em;
-    padding: 1.5em 1em;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-  }
+const SignInBar = styled.div`
+  position: absolute;
+  top: 10%;
+  left: -10%;
+  width: 150%;
+  height: 60%;
+  background: #445502;
+  border: 6px solid #f2f3ef;
+  opacity: 0.8;
+`
 
-  .terminal-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1.5em;
-    background-color: #333;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    padding: 0 0.4em;
-    box-sizing: border-box;
-  }
 
-  .terminal-controls {
-    float: right;
-  }
-
-  .input-email {
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #0f0;
-    color: #0f0;
-    font-family: "Courier New", Courier, monospace;
-    outline: none;
-    width: 180px;
-  }
-
-  .input-password {
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #0f0;
-    color: #0f0;
-    font-family: "Courier New", Courier, monospace;
-    outline: none;
-    width: 180px;
-  }
-
-  .input-row-email {
-    width: 0;
-    display: block;
-    margin-top: 1.5em;
-    white-space: nowrap;
-    overflow: hidden;
-    animation: typeCreds 1.0s steps(22) 0s forwards
-  }
-
-  .input-row-password {
-    width: 0;
-    display: block;
-    margin-top: 1.5em;
-    white-space: nowrap;
-    overflow: hidden;
-    animation: typeCreds 1.0s steps(25) 2s forwards
-  }
-
-  .control {
-    display: inline-block;
-    width: 0.6em;
-    height: 0.6em;
-    margin-left: 0.4em;
-    border-radius: 50%;
-    background-color: #777;
-  }
-
-  .control.close {
-    background-color: #e33;
-  }
-
-  .control.minimize {
-    background-color: #ee0;
-  }
-
-  .control.maximize {
-    background-color: #0b0;
-  }
-
-  .terminal-title {
-    float: left;
-    line-height: 1.5em;
-    color: #eee;
-  }
-
-  .text {
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    animation:
-      typeOnce 1.2s steps(16) forwards;
-    margin-top: 1.5em;
-
-  }
-
-  .text.google {
-    display:block;
-    width: 0;
-    animation: typePrompt 1s steps(28) 5s forwards;
-  }
-   .text.prompt {
-    display:block;
-    width: 0;
-    animation: typePrompt 1.5s steps(34) 2s forwards;
-   }     
-   .text.bar {
-    display:block;
-    width: 0;
-    animation: typePrompt 1.5s steps(19) 6s forwards
-   }
-    .text.signs {
-    display:block;
-    width: 0;
-    animation: typePrompt 1.5s steps(19) 3.5s forwards;
-    }`;
-
+const SignInTab = styled.div`
+  position: absolute;
+  width: 35%;
+  height: 40%;
+  background: white;
+  border: 6px solid black;
+  box-shadow: 12px 12px 0px #CCFF00;
+  top: 10%;
+  left: 10%;
+  opacity: 0.92;
+`
+//https://www.w3schools.com/howto/howto_css_arrows.asp#:~:text=1)%20Add%20HTML:-,Example,/i%3E </3 Chud didn't know how to make an arrow
+const Arrow = styled.div`
+  border: solid black;
+  border-width: 0 12px 12px 0;
+  display: inline-block;
+  padding: 12px;
+`;
 
 export default SignIn

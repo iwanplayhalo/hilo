@@ -14,7 +14,7 @@ const Hero = ({text}) => {
       <BackgroundText style={{fontFamily: 'fantasy', font: 'Blippo', top: '88%', left: '42%', fontSize: '190px', opacity: 0.3 }}>MARKETS</BackgroundText>
       <BackgroundText style={{ top: '60%', left: '20%', fontSize: '150px', opacity: 0.5 }}>KALSHI</BackgroundText>
       <BackgroundText style={{ top: '63%', left: '60%', fontSize: '150px', rotate:'180deg', opacity: 0.7 }}>
-        <Link href="/about" style={{ color: 'black'}}>
+        <Link href="/signin" style={{ color: 'black'}}>
           sign-in
         </Link>
       </BackgroundText>
@@ -26,7 +26,7 @@ const Hero = ({text}) => {
       </Title>
       
       <PlayButton style={{ right: '0%', top: '82%'} }>
-        <Link href="/signin" style={{ color: 'black', textDecoration: 'none' }}>PLAY<br/>NOW</Link>
+        <Link href="/play" style={{ color: 'black', textDecoration: 'none' }}>PLAY<br/>NOW</Link>
       </PlayButton>
       
       <Arrow style={{ position: 'absolute', top: '40%', right: '3%', transform: 'rotate(45deg)' }} />
