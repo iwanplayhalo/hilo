@@ -1,175 +1,196 @@
 import React from 'react';
 import styled from 'styled-components';
-import Link from 'next/link'
+import Link from 'next/link';
+
 const Hero = ({text}) => {
   return (
-    <StyledWrapper>
-      <div className="container">
-        <div className="terminal-loader">
-          <div className="terminal-header">
-             <div className="terminal-title">What the Helly</div>
-                 <div className="terminal-controls">
-                 <div className="control close" />
-                 <div className="control minimize" />
-                 <div className="control maximize" />
-             </div>
-           </div>
-           <pre className="figlet">{String.raw`      ___           ___                         ___           ___           ___           ___     
-     /__/\         /  /\                       /  /\         /  /\         /__/\         /  /\    
-    _\_ \:\       /  /:/_                     /  /:/        /  /::\       |  |::\       /  /:/_   
-   /__/\ \:\     /  /:/ /\    ___     ___    /  /:/        /  /:/\:\      |  |:|:\     /  /:/ /\  
-  _\_ \:\ \:\   /  /:/ /:/_  /__/\   /  /\  /  /:/  ___   /  /:/  \:\   __|__|:|\:\   /  /:/ /:/_ 
- /__/\ \:\ \:\ /__/:/ /:/ /\ \  \:\ /  /:/ /__/:/  /  /\ /__/:/ \__\:\ /__/::::| \:\ /__/:/ /:/ /\
- \  \:\ \:\/:/ \  \:\/:/ /:/  \  \:\  /:/  \  \:\ /  /:/ \  \:\ /  /:/ \  \:\~~\__\/ \  \:\/:/ /:/
-  \  \:\ \::/   \  \::/ /:/    \  \:\/:/    \  \:\  /:/   \  \:\  /:/   \  \:\        \  \::/ /:/ 
-   \  \:\/:/     \  \:\/:/      \  \::/      \  \:\/:/     \  \:\/:/     \  \:\        \  \:\/:/  
-    \  \::/       \  \::/        \__\/        \  \::/       \  \::/       \  \:\        \  \::/   
-     \__\/         \__\/                       \__\/         \__\/         \__\/         \__\/    `}</pre>
-           <div className="text">Welcome to Hi Lo!</div><br/>
-           <div className="text prompt">> Hello, what would you like to do?</div><br/>
-           <div className="text bar">> [<Link href="/about">About</Link>] [<Link href="/signin">Sign In</Link>] [<Link href="/play">Play</Link>] </div>
-          </div>
-      </div>
-    </StyledWrapper>
+    <LandingContainer>
+      <LeftBar />
+      <CenterBar />
+      <BackgroundText style={{fontFamily: 'Arial',fontSize: '180px', opacity: 0.3 }}>PREDICTIONS</BackgroundText>
+      <BackgroundText style={{fontSize: '200px', top: '15%', left:'50%', opacity: 0.6 }}>HIGHER</BackgroundText>
+      <BackgroundText style={{ top: '35%', left: '-8%', fontSize: '160px', opacity: 0.2 }}>LOWER</BackgroundText>
+      <BackgroundText style={{ top: '35%', right: '30%', fontFamily: 'Arial', fontSize: '220px', opacity: 0.67 }}>GUESS</BackgroundText>
+      <BackgroundText style={{fontFamily: 'fantasy', font: 'Blippo', top: '88%', left: '42%', fontSize: '190px', opacity: 0.3 }}>MARKETS</BackgroundText>
+      <BackgroundText style={{ top: '60%', left: '20%', fontSize: '150px', opacity: 0.5 }}>KALSHI</BackgroundText>
+      <BackgroundText style={{ top: '63%', left: '60%', fontSize: '150px', rotate:'180deg', opacity: 0.7 }}>
+        <Link href="/about" style={{ color: 'black'}}>
+          sign-in
+        </Link>
+      </BackgroundText>
+
+      <Title>
+        <span className="word-higher" style={{ transform: 'translateX(150px) rotate(-7deg)' }}>HIGHER</span>
+        <span style={{ transform: 'translateX(450px) translateY(5px) rotate(5deg)' }}>OR</span>
+        <span className="word-lower" style={{ transform: 'translateX(440px)rotate(-4deg)' }}>LOWER</span>
+      </Title>
+      
+      <PlayButton style={{ right: '0%', top: '82%'} }>
+        <Link href="/signin" style={{ color: 'black', textDecoration: 'none' }}>PLAY<br/>NOW</Link>
+      </PlayButton>
+      
+      <Arrow style={{ position: 'absolute', top: '40%', right: '3%', transform: 'rotate(45deg)' }} />
+      <Arrow style={{ position: 'absolute', top: '60%', right: '3%', transform: 'rotate(45deg)' }} />
+      <Arrow style={{ position: 'absolute', top: '52%', right: '3%', transform: 'rotate(45deg)' }} />
+      <Arrow style={{ position: 'absolute', top: '70%', right: '3%', transform: 'rotate(45deg)' }} />
+
+      <Arrow style={{ position: 'absolute', top: '45%', right: '7%', transform: 'rotate(45deg)' }} />
+      <Arrow style={{ position: 'absolute', top: '56%', right: '7%', transform: 'rotate(45deg)' }} />
+      <Arrow style={{ position: 'absolute', top: '67%', right: '7%', transform: 'rotate(45deg)' }} />
+      <Arrow style={{ position: 'absolute', top: '77%', right: '7%', transform: 'rotate(45deg)' }} />
+
+      <RulesCard>
+        <h2>HOW TO PLAY</h2>
+        <ol>
+          <li style={{ transform: 'translateX(5px) rotate(-1deg)' }}>SEE LEFT %</li>
+          <li style={{ transform: 'translateX(-8px) rotate(2deg)', fontWeight: 900, fontSize: '20px' }}>GUESS ↑ OR ↓</li>
+          <li style={{ transform: 'translateX(10px) rotate(-0.5deg)' }}>CORRECT? GO ON</li>
+          <li style={{ transform: 'translateX(-3px) rotate(1deg)' }}>WRONG? RESTART</li>
+        </ol>
+      </RulesCard>
+    </LandingContainer>
   );
 };
-//https://uiverse.io/jeremyssocial/ugly-bullfrog-62 for basic terminal, animations were done by me
-const StyledWrapper = styled.div`
-  width: 100%;
+
+const LandingContainer = styled.main`
+  position: relative;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: purple;
-    background-image: linear-gradient(
-      45deg,
-      transparent 33.3%,
-      #08521259 33.3%,
-      rgba(10, 90, 53, 0.35) 66.6%,
-      transparent 66.6%
-    ),
-    linear-gradient(
-      -45deg,
-      transparent 33.3%,
-      #08521259 33.3%,
-      rgba(10, 90, 53, 0.35) 66.6%,
-      transparent 66.6%
-    );
-    background-size: 60px 60px;
-  animation: moveBackgroundH 1s linear infinite;
-  @keyframes moveBackgroundH {
-  from {
-    background-position: 0px -60px;
-  }
-  to {
-    background-position: -60px 60px;
-  }
-}
+  background: white;
+  border: 10px solid black;
+  padding: 40px;
+  overflow: hidden;
+`;
 
-  @keyframes typeOnce {
-    from {width:0;}
-    to {width: 19ch;}
+const BackgroundText = styled.div`
+  position: absolute;
+  font-weight: 900;
+  letter-spacing: -8px;
+  line-height: 0.8;
+  z-index: 0;
+  white-space: nowrap;
+  &:hover {
+    transform: rotate(4deg) translate(7px, 7px);
   }
+`;
 
-  @keyframes typePrompt {
-    from {width: 0;}
-    to {width: 35ch;}
+const Title = styled.h1`
+  position: absolute;
+  top: 15%;
+  left: 8%;
+  font-size: 90px;
+  font-weight: 900;
+  line-height: 0.8;
+  z-index: 3;
+  
+  span {
+    display: block;
+    text-transform: uppercase;
   }
-
-  a {
-    color: #0f0;
-    text-decoration: none;
-    
+  
+  .word-higher {
+    background: white;
+    border: 2px solid black;
+  }
+  
+  .word-or {
+    background: #CCFF00;
+    padding: 10px 20px;
+    display: inline-block;
+    border: 5px solid black;
+  }
+  
+  .word-lower {
+    background: black;
+    color: white;
+    padding: 10px 20px;
+    display: inline-block;
+  }
     &:hover {
-      text-decoration: underline;
-      color: #5b1bd1;
+    transform: rotate(4deg) translate(7px, 7px);
+  }
+`;
+
+const PlayButton = styled.button`
+  position: absolute;
+  top: 28%;
+  right: 15%;
+  background: #CCFF00;
+  border: 6px solid black;
+  padding: 35px 55px;
+  font-size: 30px;
+  font-weight: 900;
+  text-transform: uppercase;
+  box-shadow: -15px 15px 0px black;
+  cursor: pointer;
+  z-index: 4;
+  transform: rotate(-7deg);
+  
+  &:hover {
+    transform: rotate(4deg) translate(7px, 7px);
+    box-shadow: 10px -10px 0px black;
+  }
+`;
+
+const RulesCard = styled.div`
+  font-family: "comic sans ms";
+  position: absolute;
+  bottom: 18%;
+  left: 8%;
+  background: white;
+  border: 6px solid black;
+  box-shadow: 12px 12px 0px #CCFF00;
+  padding: 35px 40px;
+  max-width: 380px;
+  z-index: 3;
+  transform: rotate(-4deg);
+  h2 {
+    font-size: 26px;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    border-bottom: 5px solid black;
+    padding-bottom: 12px;
+  }
+  
+  ol {
+    list-style: none;
+    padding: 0;
+    
+    li {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 12px;
     }
   }
+`
+const LeftBar = styled.div`
+  position: absolute;
+  top: -10%;
+  left: -5%;
+  width: 55%;
+  height: 150%;
+  opacity: 0.5;
+  rotate: -5deg;
+  background: #CCFF00;
+`
 
-  .terminal-loader {
-    width: 550px;
-    min-height: 500px;
-    border: 0.1em solid #333;
-    background-color: #000000;
-    color: #0f0;
-    font-family: "Courier New", Courier, monospace;
-    font-size: 1em;
-    padding: 1.5em 1em;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-  }
+const CenterBar = styled.div`
+  position: absolute;
+  top: -25%;
+  left: 20%;
+  width: 55%;
+  height: 200%;
+  opacity: 0.5;
+  rotate: 15deg;
+  background: #758f0f;
+`
 
-  .terminal-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1.5em;
-    background-color: #333;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    padding: 0 0.4em;
-    box-sizing: border-box;
-  }
-
-  .terminal-controls {
-    float: right;
-  }
-
-  .control {
-    display: inline-block;
-    width: 0.6em;
-    height: 0.6em;
-    margin-left: 0.4em;
-    border-radius: 50%;
-    background-color: #777;
-  }
-
-  .control.close {
-    background-color: #e33;
-  }
-
-  .control.minimize {
-    background-color: #ee0;
-  }
-
-  .control.maximize {
-    background-color: #0b0;
-  }
-
-  .terminal-title {
-    float: left;
-    line-height: 1.5em;
-    color: #eee;
-  }
-
-  .text {
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    animation:
-      typeOnce 1.2s steps(16) forwards;
-    margin-top: 1.5em;
-
-  }
-   .text.prompt {
-    width: 0;
-    animation: typePrompt 1.5s steps(34) 2s forwards;
-   }     
-   .text.bar {
-    width: 0;
-    animation: typePrompt 1.5s steps(19) 3.5s forwards
-   }
-
-   .figlet { 
-    font-size: 0.65em;
-    line-height: 1.4;
-    margin-top: 5.5em;
-    white-space: pre;
-   }
-   `;
-// ngl i had no idea it was called a figlet 
+//https://www.w3schools.com/howto/howto_css_arrows.asp#:~:text=1)%20Add%20HTML:-,Example,/i%3E </3 Chud didn't know how to make an arrow
+const Arrow = styled.div`
+  border: solid black;
+  border-width: 0 12px 12px 0;
+  display: inline-block;
+  padding: 12px;
+`;
 export default Hero;
