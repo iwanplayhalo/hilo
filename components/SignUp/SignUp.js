@@ -1,47 +1,47 @@
+// SignUp component for user registration and auth 
 import React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useStateContext } from '@/context/StateContext'
-import { loginUser } from '@/backend/Auth'
-const SignIn = () => {
-  const { setUser } = useStateContext()
-  const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const signIn = async () => {
-      try{
-          const user = await loginUser(email, password, setUser)
+import { register } from '@/backend/Auth'
+const SignUp = () => {
+    const router = useRouter()
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const signUp = async () => {
+        try{
+            const user = await register(email, password)
             if (user) {
-              router.push('/play')
-          }
+                router.push('/play')
+            }
         }
         catch(err){
-            console.log('Error Signing In', err)
+            console.log('Error Signing Up', err)
         }
     }
   return (
     <LandingContainer>
           <LeftBar />
           <CenterBar />
-          <SignInText style={{fontFamily: 'Arial',left: '-5%', top:'-5%',fontSize: '180px', opacity: 0.3, }}>PREDICTIONS HIGHER LOWER GUESS MARKETS</SignInText>
-          <SignInText style={{fontSize: '200px', top: '9%', left:'-20%', opacity: 0.6 }}>PREDICTIONS HIGHER LOWER GUESS MARKETS</SignInText>
-          <SignInText style={{ top: '24%', left: '-80%', fontSize: '160px', opacity: 0.4 }}>PREDICTIONS HIGHER LOWER GUESS MARKETS</SignInText>
-          <SignInText style={{ top: '35.35%', left: '-45%', fontFamily: 'Arial', fontSize: '220px', opacity: 0.67 }}>PREDICTIONS HIGHER LOWER GUESS MARKETS</SignInText>
-          <SignInText style={{fontFamily: 'fantasy', font: 'Blippo', top: '84%', left: '42%', fontSize: '190px', opacity: 0.3 }}>PREDICTIONS</SignInText>
-          <SignInText style={{ top: '51%',left: '-2%', fontSize: '590px', opacity: 0.8 }}>LOW</SignInText>
+          <SignUpText style={{fontFamily: 'Arial',left: '-5%', top:'-5%',fontSize: '180px', opacity: 0.3, }}>PREDICTIONS HIGHER LOWER GUESS MARKETS</SignUpText>
+          <SignUpText style={{fontSize: '200px', top: '9%', left:'-20%', opacity: 0.6 }}>PREDICTIONS HIGHER LOWER GUESS MARKETS</SignUpText>
+          <SignUpText style={{ top: '24%', left: '-80%', fontSize: '160px', opacity: 0.4 }}>PREDICTIONS HIGHER LOWER GUESS MARKETS</SignUpText>
+          <SignUpText style={{ top: '35.35%', left: '-45%', fontFamily: 'Arial', fontSize: '220px', opacity: 0.67 }}>PREDICTIONS HIGHER LOWER GUESS MARKETS</SignUpText>
+          <SignUpText style={{fontFamily: 'fantasy', font: 'Blippo', top: '84%', left: '42%', fontSize: '190px', opacity: 0.3 }}>PREDICTIONS</SignUpText>
+          <SignUpText style={{ top: '51%',left: '-2%', fontSize: '590px', opacity: 0.8 }}>LOW</SignUpText>
           <BackgroundText style={{ top: '72%', left: '75%', fontSize: '150px', rotate:'180deg', opacity: 0.7 }}>
             <Link href="/" style={{ color: 'black'}}>
               home
             </Link>
           </BackgroundText>
           
-          <SignInBar style={{rotate: '-5deg'}}/>
-          <input type="text" placeholder="email" onChange={(e) => setEmail(e.target.value)} style={{position: 'absolute', top: '30%', left: '25%', width: '30%', height: '10%', fontSize: '20px', padding: '10px', border: '4px solid black', boxShadow: '6px 6px 0px #CCFF00'}} />
+          <SignUpBar style={{rotate: '-5deg'}}/>
+          <input type="email" placeholder="email" onChange={(e) => setEmail(e.target.value)} style={{position: 'absolute', top: '30%', left: '25%', width: '30%', height: '10%', fontSize: '20px', padding: '10px', border: '4px solid black', boxShadow: '6px 6px 0px #CCFF00'}} />
           <input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} style={{position: 'absolute', top: '45%', left: '30%', width: '30%', height: '10%', fontSize: '20px', padding: '10px', border: '4px solid black', boxShadow: '6px 6px 0px #CCFF00'}} />
-          <PlayButton style={{ right: '15%', top: '60%' }} type = "button" onClick={signIn} >
-            SIGN IN
+          <PlayButton style={{ right: '15%', top: '60%' }} type = "button" onClick={signUp} >
+            SIGN UP
           </PlayButton>
 
           <PlayButton style={{ right: '0%', top: '82%'} }>
@@ -82,7 +82,7 @@ const BackgroundText = styled.div`
   }
 `;
 
-const SignInText = styled.div`
+const SignUpText = styled.div`
   position: absolute;
   font-weight: 900;
   letter-spacing: -8px;
@@ -134,7 +134,7 @@ const CenterBar = styled.div`
   background: #758f0f;
 `
 
-const SignInBar = styled.div`
+const SignUpBar = styled.div`
   position: absolute;
   top: 10%;
   left: -10%;
@@ -153,4 +153,4 @@ const Arrow = styled.div`
   padding: 12px;
 `;
 
-export default SignIn
+export default SignUp

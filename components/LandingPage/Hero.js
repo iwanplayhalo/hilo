@@ -19,6 +19,12 @@ const Hero = ({text}) => {
         </Link>
       </BackgroundText>
 
+      <BackgroundText style={{ top: '42%', left: '70%', fontSize: '150px', opacity: 0.7 }}>
+        <Link href="/signup" style={{ color: 'black'}}>
+          sign-up
+        </Link>
+      </BackgroundText>
+
       <Title>
         <span className="word-higher" style={{ transform: 'translateX(150px) rotate(-7deg)' }}>HIGHER</span>
         <span style={{ transform: 'translateX(450px) translateY(5px) rotate(5deg)' }}>OR</span>
@@ -101,6 +107,7 @@ const Title = styled.h1`
   
   .word-lower {
     background: black;
+    border: 2px solid white;
     color: white;
     padding: 10px 20px;
     display: inline-block;
