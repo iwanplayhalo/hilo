@@ -1,9 +1,9 @@
 import React from 'react'
-
-const Play = () => {
+import Play from '@/components/Play/Play.js'
+const PlayPage = () => {
   return (
-    <div>About</div>
+    <Play/>
   )
 }
 
-export default Play
+export default PlayPage
