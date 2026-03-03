@@ -13,6 +13,7 @@
     "babel-plugin-styled-components": "^2.1.4",
     "crypto": "^1.0.1",
     "firebase": "^10.8.1",
+    "kalshi-typescript": "^3.8.0",
     "mvp-starter": "file:",
     "next": "^14.2.35",
     "react": "^18",

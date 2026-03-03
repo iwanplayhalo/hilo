@@ -7,10 +7,11 @@ const Play = ({text}) => {
     useEffect(() => {
     const fetchMarkets = async () => {
         try {
-        const response = await fetch('https://api.elections.kalshi.com/trade-api/v2/markets?status=open')
-        const data = await response.json()
-        console.log('Kalshi data:', data)
-        console.log('First market:', data.markets[0])
+            const response = await fetch('/api/markets');
+            const data = await response.json();
+
+            //console.log('Markets:', data);
+
         } catch (err) {
         console.log('Error:', err)
         }
