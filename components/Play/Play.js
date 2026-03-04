@@ -1,15 +1,33 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useStateContext } from '@/context/StateContext.js';
 
 const Play = ({text}) => {
+    const { highScore, setHighScore, gamesPlayed, setGamesPlayed } = useStateContext();
+
+    const [markets, setMarkets] = useState([]);
+    const [leftMarket, setLeftMarket] = useState(null); // always visible
+    const [rightMarket, setRightMarket] = useState(null); // this will be the effected by revealed state
+    const [revealed, setRevealed] = useState(false);
+    const [streak, setStreak] = useState(0); 
+
     useEffect(() => {
     const fetchMarkets = async () => {
         try {
             const response = await fetch('/api/markets');
             const data = await response.json();
-
+            setMarkets(data);
+            if (data.length >= 2) { // off chance we don't get any active marks
+                const rand1 = Math.floor(Math.random() * data.length);
+                let rand2 = Math.floor(Math.random() * data.length);
+                while (rand1 === rand2) {
+                    rand2 = Math.floor(Math.random() * data.length);
+                }
+                setLeftMarket(data[rand1]);
+                setRightMarket(data[rand2]);
+            }
             //console.log('Markets:', data);
 
         } catch (err) {
@@ -18,8 +36,37 @@ const Play = ({text}) => {
     }
     fetchMarkets()
     }, [])
+    const handleGuess = (guess) => {
+        const leftPrice = parseFloat(JSON.parse(leftMarket.outcomePrices)[0]);
+        const rightPrice = parseFloat(JSON.parse(rightMarket.outcomePrices)[0]);
+        
+        const isCorrect = (guess === 'HIGHER' && rightPrice > leftPrice) || 
+                          (guess === 'LOWER' && rightPrice < leftPrice);
+        
+        setRevealed(true);
+        
+        if (isCorrect) {
+            setStreak(streak + 1);
+            
+            setTimeout(() => {
+                setLeftMarket(rightMarket);
+                const newRight = markets[Math.floor(Math.random() * markets.length)];
+                setRightMarket(newRight);
+                setRevealed(false);
+                setStreak(streak + 1);
+            }, 100);
+        } else {
+            if (streak > highScore) setHighScore(streak);
+            setGamesPlayed(gamesPlayed + 1);
+            setStreak(0);
+
+        }
+    };
+
   return (
+    
     <LandingContainer>
+      <StyledButton></StyledButton>
       <LeftBar />
       <CenterBar />
       <BackgroundText style={{fontFamily: 'Arial',fontSize: '180px', opacity: 0.3 }}>PREDICTIONS</BackgroundText>
@@ -28,8 +75,25 @@ const Play = ({text}) => {
       <BackgroundText style={{ top: '35%', right: '30%', fontFamily: 'Arial', fontSize: '220px', opacity: 0.67 }}>GUESS</BackgroundText>
       <BackgroundText style={{fontFamily: 'fantasy', font: 'Blippo', top: '88%', left: '42%', fontSize: '190px', opacity: 0.3 }}>MARKETS</BackgroundText>
       <BackgroundText style={{ top: '60%', left: '20%', fontSize: '150px', opacity: 0.5 }}>KALSHI</BackgroundText>
-      <Card style={{rotate: '9deg', top: '23%', left: '45%'}}>MARKET</Card>
-      <Card style={{rotate: '-9deg', top: '23%', left: '15%'}}>MARKET</Card>
+      <Card style={{rotate: '-9deg', top: '23%', left: '15%'}}>
+        {leftMarket && (
+                    <>
+                        <h3>{leftMarket.question}</h3>
+                        <Yes style={{width: '450px', height: '100px', rotate: '-15deg', top: '25%', left: '5%'}}><p>YES: {(parseFloat(JSON.parse(leftMarket.outcomePrices)[0]) * 100).toFixed(1)}%</p></Yes>
+                        <No style={{width: '450px', height: '100px', rotate: '5deg', top: '55%', left: '5%'}}><p>NO: {(100 - parseFloat(JSON.parse(leftMarket.outcomePrices)[0]) * 100).toFixed(1)}%</p></No>
+                    </>
+                )}
+      </Card>
+      <Card style={{rotate: '9deg', top: '23%', left: '45%'}}>
+        {rightMarket && (
+                    <>
+                        <h3>{rightMarket.question}</h3>
+                        {revealed && <p>YES: {(parseFloat(JSON.parse(rightMarket.outcomePrices)[0]) * 100).toFixed(1)}%</p>}
+                    </>
+                )}
+        <button onClick={() => handleGuess("HIGHER")}>HIGHER</button>
+        <button onClick={() => handleGuess("LOWER")}>LOWER</button>
+      </Card>
     </LandingContainer>
   );
 };
@@ -87,5 +151,67 @@ const Card = styled.div`
     transform: translate(5px, -5px);
     box-shadow: -25px 25px 0px black;
   }`
+
+  const Yes = styled.div`
+    position: absolute;
+    width: 150px;
+    height: 50px;
+    background: #0dc02b;
+    border: 4px solid black;
+    font-weight: 900;
+    font-size: 60px;
+    font-family: 'Arial';
+    font: 'Blippo';
+    opacity: 0.85;
+    `
+  const No = styled.div`
+    position: absolute;
+    width: 150px;
+    height: 50px;
+    background: #ff3b3b;
+    border: 4px solid black;
+    font-weight: 900;
+    font-size: 60px;
+    font-family: 'Arial';
+    font: 'Blippo';
+    opacity: 0.85;
+    `
+
+    //https://uiverse.io/AqFox/fat-ladybug-84
+  const StyledButton = styled.button`
+    --c: #fff;
+   /* text color */
+    background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%) var(--_p,100%)/300% no-repeat,
+      #004dff;
+   /* background color */
+    color: #0000;
+    border: none;
+    transform: perspective(500px) rotateY(calc(20deg*var(--_i,-1)));
+    text-shadow: calc(var(--_i,-1)* 0.08em) -.01em 0   var(--c),
+      calc(var(--_i,-1)*-0.08em)  .01em 2px #0004;
+    outline-offset: .1em;
+    transition: 0.3s;
+  }
+
+  &:hover,
+  button:focus-visible {
+    --_p: 0%;
+    --_i: 1;
+  }
+
+  &:active {
+    text-shadow: none;
+    color: var(--c);
+    box-shadow: inset 0 0 9e9q #0005;
+    transition: 0s;
+  }
+
+    font-family: system-ui, sans-serif;
+    font-weight: bold;
+    font-size: 2rem;
+    margin: 0;
+    cursor: pointer;
+    padding: .1em .3em;
+`
 ;
 export default Play;

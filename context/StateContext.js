@@ -8,11 +8,12 @@ const Context = createContext();
 export const StateContext = ({ children }) => {
 
   // Variables to Carry Across Multiple Pages
-  const [user, setUser] = useState(undefined)
+  const [user, setUser] = useState(null)
+  const [highScore, setHighScore] = useState(0)
+  const [gamesPlayed, setGamesPlayed] = useState(0)
 
   const router = useRouter()
   const { asPath } = useRouter()
-
   // AUTHENTICATION REMEMBER ME USEEFFECT
   // useEffect(() => {
   //   const unsubscribe = onIdTokenChanged(auth, (user) => {
@@ -36,7 +37,11 @@ return(
     <Context.Provider
     value={{
         user,
-        setUser
+        setUser,
+        highScore,
+        setHighScore,
+        gamesPlayed,
+        setGamesPlayed
     }}
     >
       {children}
