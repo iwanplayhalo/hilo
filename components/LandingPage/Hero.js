@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
-
+import { useStateContext } from '@/context/StateContext.js';
 const Hero = ({text}) => {
+  const { highScore, gamesPlayed } = useStateContext();
   return (
     <LandingContainer>
       <LeftBar />
@@ -52,6 +53,14 @@ const Hero = ({text}) => {
           <li style={{ transform: 'translateX(-8px) rotate(2deg)', fontWeight: 900, fontSize: '20px' }}>GUESS ↑ OR ↓</li>
           <li style={{ transform: 'translateX(10px) rotate(-0.5deg)' }}>CORRECT? GO ON</li>
           <li style={{ transform: 'translateX(-3px) rotate(1deg)' }}>WRONG? RESTART</li>
+        </ol>
+      </RulesCard>
+
+      <RulesCard style={{ left: '85%', rotate: '10deg', top: '0%', bottom: 'auto'}}>
+        <h2> STATS </h2>
+        <ol>
+          <li>High Score: {highScore}</li>
+          <li>Games Played: {gamesPlayed}</li>
         </ol>
       </RulesCard>
     </LandingContainer>

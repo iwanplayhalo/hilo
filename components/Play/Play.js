@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useStateContext } from '@/context/StateContext.js';
+import { useRouter } from 'next/router';
 
 const Play = ({text}) => {
+    const router = useRouter();
     const { highScore, setHighScore, gamesPlayed, setGamesPlayed } = useStateContext();
 
     const [markets, setMarkets] = useState([]);
@@ -43,30 +45,28 @@ const Play = ({text}) => {
         const isCorrect = (guess === 'HIGHER' && rightPrice > leftPrice) || 
                           (guess === 'LOWER' && rightPrice < leftPrice);
         
-        setRevealed(true);
+        //setRevealed(true);
         
         if (isCorrect) {
             setStreak(streak + 1);
-            
-            setTimeout(() => {
-                setLeftMarket(rightMarket);
-                const newRight = markets[Math.floor(Math.random() * markets.length)];
-                setRightMarket(newRight);
-                setRevealed(false);
-                setStreak(streak + 1);
-            }, 100);
+            setLeftMarket(rightMarket);
+            const newRight = markets[Math.floor(Math.random() * markets.length)];
+            setRightMarket(newRight);
         } else {
             if (streak > highScore) setHighScore(streak);
             setGamesPlayed(gamesPlayed + 1);
             setStreak(0);
-
+            setRevealed(true);
+            setTimeout(() => {
+                router.push('/');
+            }, 2000);
         }
     };
 
   return (
     
     <LandingContainer>
-      <StyledButton></StyledButton>
+      <p>Streak: {streak}</p>
       <LeftBar />
       <CenterBar />
       <BackgroundText style={{fontFamily: 'Arial',fontSize: '180px', opacity: 0.3 }}>PREDICTIONS</BackgroundText>
@@ -88,11 +88,11 @@ const Play = ({text}) => {
         {rightMarket && (
                     <>
                         <h3>{rightMarket.question}</h3>
-                        {revealed && <p>YES: {(parseFloat(JSON.parse(rightMarket.outcomePrices)[0]) * 100).toFixed(1)}%</p>}
+                        {revealed && <p style={{fontSize: '100px', textEmphasis: 'bold', fontFamily: 'Arial', top: '10%'}}><br/>{(parseFloat(JSON.parse(rightMarket.outcomePrices)[0]) * 100).toFixed(1)}%</p>}
                     </>
                 )}
-        <button onClick={() => handleGuess("HIGHER")}>HIGHER</button>
-        <button onClick={() => handleGuess("LOWER")}>LOWER</button>
+        <button id="higher-button" style={{top: '55%'}} disabled={revealed} onClick={() => handleGuess("HIGHER")}>HIGHER</button>
+        <button id="lower-button" style={{top: '70%', left: '50%'}} disabled={revealed} onClick={() => handleGuess("LOWER")}>LOWER</button>
       </Card>
     </LandingContainer>
   );
@@ -105,7 +105,40 @@ const LandingContainer = styled.main`
   border: 10px solid black;
   padding: 40px;
   overflow: hidden;
-`;
+
+  #higher-button {
+    position: absolute;
+    width: 150px;
+    height: 50px;
+    background: #0dc02b;
+    border: 4px solid black;
+    font-weight: 900;
+    font-size: 20px;
+    font-family: 'Arial';
+    font: 'Blippo';
+    opacity: 0.85;
+    &:disabled {
+      background: grey;
+      border-color: grey;
+      cursor: not-allowed;}
+    }
+  #lower-button {
+    position: absolute;
+    width: 150px;
+    height: 50px;
+    background: #ff3b3b;
+    border: 4px solid black;
+    font-weight: 900;
+    font-size: 20px;
+    font-family: 'Arial';
+    font: 'Blippo';
+    opacity: 0.85;
+    &:disabled {
+      background: grey;
+      border-color: grey;
+      cursor: not-allowed;}
+    }
+    `;
 
 const BackgroundText = styled.div`
   position: absolute;
@@ -177,41 +210,6 @@ const Card = styled.div`
     opacity: 0.85;
     `
 
-    //https://uiverse.io/AqFox/fat-ladybug-84
-  const StyledButton = styled.button`
-    --c: #fff;
-   /* text color */
-    background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%) var(--_p,100%)/300% no-repeat,
-      #004dff;
-   /* background color */
-    color: #0000;
-    border: none;
-    transform: perspective(500px) rotateY(calc(20deg*var(--_i,-1)));
-    text-shadow: calc(var(--_i,-1)* 0.08em) -.01em 0   var(--c),
-      calc(var(--_i,-1)*-0.08em)  .01em 2px #0004;
-    outline-offset: .1em;
-    transition: 0.3s;
-  }
-
-  &:hover,
-  button:focus-visible {
-    --_p: 0%;
-    --_i: 1;
-  }
-
-  &:active {
-    text-shadow: none;
-    color: var(--c);
-    box-shadow: inset 0 0 9e9q #0005;
-    transition: 0s;
-  }
-
-    font-family: system-ui, sans-serif;
-    font-weight: bold;
-    font-size: 2rem;
-    margin: 0;
-    cursor: pointer;
-    padding: .1em .3em;
-`
+    
 ;
 export default Play;
