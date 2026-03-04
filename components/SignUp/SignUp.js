@@ -5,16 +5,26 @@ import Link from 'next/link'
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useStateContext } from '@/context/StateContext'
-import { register } from '@/backend/Auth'
+import { register, isEmailInUse } from '@/backend/Auth'
+import { saveUserStats } from '@/backend/Database.js';
 const SignUp = () => {
     const router = useRouter()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const signUp = async () => {
         try{
+            const emailInUse = await isEmailInUse(email);
+            if (emailInUse) { // email validation (whoops i didn't have this for a while)
+                alert('Email already in use. Please sign in or use a different email.')
+                return;
+            }
             const user = await register(email, password)
             if (user) {
-                router.push('/play')
+                saveUserStats(user.uid, {
+                    highScore: 0,
+                    gamesPlayed: 0
+                });
+                router.push('/play') // auto go to play
             }
         }
         catch(err){

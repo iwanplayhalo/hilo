@@ -2,8 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useStateContext } from '@/context/StateContext.js';
+import { signOut } from 'firebase/auth'
+import { auth } from '@/backend/Firebase.js';
+
 const Hero = ({text}) => {
   const { highScore, gamesPlayed } = useStateContext();
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.log('Error:', err);
+    }
+  };
   return (
     <LandingContainer>
       <LeftBar />
@@ -63,6 +73,7 @@ const Hero = ({text}) => {
           <li>Games Played: {gamesPlayed}</li>
         </ol>
       </RulesCard>
+    <LogoutBtn onClick={handleLogout}>LOGOUT</LogoutBtn>
     </LandingContainer>
   );
 };
@@ -208,5 +219,27 @@ const Arrow = styled.div`
   border-width: 0 12px 12px 0;
   display: inline-block;
   padding: 12px;
+`
+
+const LogoutBtn = styled.button`
+  position: absolute;
+  top: 0%;
+  left: -1%;
+  rotate: -10deg;
+  background: #ff4d4d;
+  border: 6px solid black;
+  padding: 15px 25px;
+  font-size: 20px;
+  font-weight: 900;
+  text-transform: uppercase;
+  box-shadow: -15px 15px 0px black;
+  cursor: pointer;
+  
+  &:hover {
+    transform: rotate(4deg) translate(7px, 7px);
+    box-shadow: -15px -15px 0px black;
+    background: #ff3333;
+  }
 `;
+
 export default Hero;

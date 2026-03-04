@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useStateContext } from '@/context/StateContext.js';
 import { useRouter } from 'next/router';
+import { saveUserStats } from '@/backend/Database.js';
 
 const Play = ({text}) => {
     const router = useRouter();
-    const { highScore, setHighScore, gamesPlayed, setGamesPlayed } = useStateContext();
+    const { user, highScore, setHighScore, gamesPlayed, setGamesPlayed } = useStateContext();
 
     const [markets, setMarkets] = useState([]);
     const [leftMarket, setLeftMarket] = useState(null); // always visible
@@ -22,8 +23,9 @@ const Play = ({text}) => {
             const data = await response.json();
             setMarkets(data);
             if (data.length >= 2) { // off chance we don't get any active marks
-                const rand1 = Math.floor(Math.random() * data.length);
+                const rand1 = Math.floor(Math.random() * data.length); // get random market for left / right
                 let rand2 = Math.floor(Math.random() * data.length);
+                // make sure we don't have the same market 
                 while (rand1 === rand2) {
                     rand2 = Math.floor(Math.random() * data.length);
                 }
@@ -49,17 +51,24 @@ const Play = ({text}) => {
         
         if (isCorrect) {
             setStreak(streak + 1);
-            setLeftMarket(rightMarket);
-            const newRight = markets[Math.floor(Math.random() * markets.length)];
+            setLeftMarket(rightMarket); // move right market to left
+            const newRight = markets[Math.floor(Math.random() * markets.length)]; // grab new market for the right side
             setRightMarket(newRight);
         } else {
-            if (streak > highScore) setHighScore(streak);
-            setGamesPlayed(gamesPlayed + 1);
-            setStreak(0);
-            setRevealed(true);
-            setTimeout(() => {
-                router.push('/');
-            }, 2000);
+            // wrong guess, update stats in firestore and end the game (redirect to home after displaying correct answer)
+            if (user) {
+                saveUserStats(user.uid, { // update firestore 
+                    highScore: Math.max(highScore, streak),
+                    gamesPlayed: gamesPlayed + 1
+                });
+            } 
+            if (streak > highScore) setHighScore(streak); // update high score if we beat it
+                setGamesPlayed(gamesPlayed + 1);
+                setStreak(0);
+                setRevealed(true); // just show probability of right side for a moment
+                setTimeout(() => {
+                    router.push('/'); // redirect to home 
+            }, 3000);
         }
     };
 
